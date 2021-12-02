@@ -259,6 +259,9 @@ type IntVec3 struct{
 	Z  		int;
 }
 
+func(this *IntVec3) ToString() string{
+	return fmt.Sprintf("%d,%d,%d", this.X, this.Y, this.Z);
+}
 
 // greatest common divisor (GCD) via Euclidean algorithm
 func GCD(a, b int64) int64 {
