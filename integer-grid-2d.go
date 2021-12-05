@@ -19,6 +19,123 @@ type IntegerGrid2D struct {
 	Data map[int]*map[int]int;
 }
 
+type IntegerLineSegment2D struct {
+	X1 int;
+	Y1 int;
+	X2 int;
+	Y2 int;
+}
+
+func (this *IntegerLineSegment2D) Parse(line string) bool {
+	lineParts := strings.Split(line, "->");
+	if(len(lineParts) != 2){
+		Log.Info("Line segment had wrong number of parts %d", len(lineParts));
+		return false;
+	}
+	startParts := strings.Split(strings.TrimSpace(lineParts[0]), ",");
+	if(len(startParts) != 2){
+		Log.Info("Line segment had wrong number of start parts %d", len(startParts));
+		return false;
+	}
+	endParts := strings.Split(strings.TrimSpace(lineParts[1]), ",");
+	if(len(endParts) != 2){
+		Log.Info("Line segment had wrong number of end parts %d", len(endParts));
+		return false;
+	}
+
+	var err error;
+	this.X1, err = strconv.Atoi(startParts[0]);
+	if(err != nil){
+		Log.FatalError(err);
+	}
+	this.Y1, err = strconv.Atoi(startParts[1]);
+	if(err != nil){
+		Log.FatalError(err);
+	}
+	this.X2, err = strconv.Atoi(endParts[0]);
+	if(err != nil){
+		Log.FatalError(err);
+	}
+	this.Y2, err = strconv.Atoi(endParts[1]);
+	if(err != nil){
+		Log.FatalError(err);
+	}
+	return true;
+}
+
+func (this *IntegerLineSegment2D) IsStraight() bool {
+	return this.X1 == this.X2 || this.Y1 == this.Y2;
+}
+
+func (this *IntegerLineSegment2D) Log() {
+	Log.Info("%d,%d -> %d,%d", this.X1, this.Y1, this.X2, this.Y2);
+}
+
+
+func (this *IntegerGrid2D) Paint(line *IntegerLineSegment2D) {
+	if(line.X1 == line.X2){
+		// Vert line
+		start := 0;
+		end := 0;
+		if(line.Y1 < line.Y2){
+			start = line.Y1;
+			end = line.Y2;
+		} else{
+			start = line.Y2;
+			end = line.Y1;
+		}
+		for i := start; i <= end; i++{
+			val := this.GetValue(line.X1, i);
+			this.SetValue(line.X1, i, val+1);
+		}
+	} else if (line.Y1 == line.Y2){
+		start := 0;
+		end := 0;
+		if(line.X1 < line.X2){
+			start = line.X1;
+			end = line.X2;
+		} else{
+			start = line.X2;
+			end = line.X1;
+		}
+		for i := start; i <= end; i++{
+			val := this.GetValue(i, line.Y1);
+			this.SetValue(i, line.Y1, val+1);
+		}
+	} else{
+		startX := 0;
+		endX := 0;
+		startY := 0;
+		yDelta := 0;
+		if(line.X1 < line.X2){
+			startX = line.X1;
+			endX = line.X2;
+			startY = line.Y1;
+			if(line.Y1 > line.Y2){
+				yDelta = -1;
+			} else{
+				yDelta = 1;
+			}
+		} else{
+			startX = line.X2;
+			endX = line.X1;
+			startY = line.Y2;
+			if(line.Y2 > line.Y1){
+				yDelta = -1;
+			} else{
+				yDelta = 1;
+			}
+		}
+
+		y := startY;
+		for i := startX; i <= endX; i++{
+			val := this.GetValue(i, y);
+			this.SetValue(i, y, val+1);
+			y = y + yDelta;
+		}
+	}
+}
+
 func (this *IntegerGrid2D) Init() {
 	this.Data = make(map[int]*map[int]int);
 }
@@ -117,6 +234,29 @@ func (this *IntegerGrid2D) PrintToFile(fileName string, targetWidth int) {
 
 }
 
+func (this *IntegerGrid2D) CountGreaterThan(threshold int) int {
+	xMin := this.MinRow();
+	xMax := this.MaxRow();
+
+	yMin := this.MinCol();
+	yMax := this.MaxCol();
+
+	total := 0;
+	for j := yMin; j<= yMax; j++{
+		for i := xMin; i<= xMax; i++{
+			if(!this.HasValue(i, j)){
+				continue;
+			} else{
+				val := this.GetValue(i, j);
+				if(val > threshold){
+					total++;
+				}
+			}
+		}
+	}
+	return total;
+}
+
 func (this *IntegerGrid2D) Print() string {
 	xMin := this.MinRow();
 	xMax := this.MaxRow();
@@ -128,13 +268,13 @@ func (this *IntegerGrid2D) Print() string {
 	for j := yMin; j<= yMax; j++{
 		for i := xMin; i<= xMax; i++{
 			if(!this.HasValue(i, j)){
-				buff += " ";
+				buff += ".";
 			} else{
 				val := this.GetValue(i, j);
 				if(val > 0){
 					buff += strconv.Itoa(this.GetValue(i, j));
 				} else{
-					buff += " ";
+					buff += ".";
 				}
 			}
 		}
