@@ -35,8 +35,17 @@ func (this *logWrapper) FatalError(err error){
 	log.Fatal(prefix + suffix);
 }
 
+func (this *logWrapper) FatalIfError(err error){
+	if(err == nil){
+		return;
+	}
+	this.FatalError(err);
+}
+
 func (this *logWrapper) SecondsSinceStatup() string{
 	return FormatDuration(time.Now().Sub(this.StartTime));
 }
 
 var Log = &logWrapper{};
+
+

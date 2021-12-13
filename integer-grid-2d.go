@@ -258,6 +258,11 @@ func (this *IntegerGrid2D) CountGreaterThan(threshold int) int {
 }
 
 func (this *IntegerGrid2D) Print() string {
+	return this.PrintWithZero(".");
+}
+
+
+func (this *IntegerGrid2D) PrintWithZero(zeroStr string) string {
 	xMin := this.MinRow();
 	xMax := this.MaxRow();
 
@@ -274,7 +279,9 @@ func (this *IntegerGrid2D) Print() string {
 				if(val > 0){
 					buff += strconv.Itoa(this.GetValue(i, j));
 				} else{
-					buff += ".";
+					if(val == 0){
+						buff += zeroStr;
+					}
 				}
 			}
 		}
@@ -284,7 +291,6 @@ func (this *IntegerGrid2D) Print() string {
 
 	return buff;
 }
-
 func (this *IntegerGrid2D) PrintAscii() string {
 	xMin := this.MinRow();
 	xMax := this.MaxRow();
@@ -294,15 +300,16 @@ func (this *IntegerGrid2D) PrintAscii() string {
 
 	buff := "";
 	for j := yMin; j<= yMax; j++{
+		buff += strconv.Itoa(j) + " --- ";
 		for i := xMin; i<= xMax; i++{
 			if(!this.HasValue(i, j)){
-				buff += " ";
+				buff += ".";
 			} else{
 				val := this.GetValue(i, j);
 				if(val > 0){
 					buff += fmt.Sprintf("%c", this.GetValue(i, j));
 				} else{
-					buff += " ";
+					buff += ".";
 				}
 			}
 		}
