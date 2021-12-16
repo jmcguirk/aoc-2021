@@ -747,7 +747,7 @@ func (this *IntegerGrid2D) ShortestPath(from *IntVec2, to *IntVec2, blockValue i
 	frontierMap := make(map[int]int);
 	frontierMap[from.TileIndex()] = 1;
 
-	minCostToStart.SetValue(from.X, from.Y, 1);
+	minCostToStart.SetValue(from.X, from.Y, this.GetValue(from.X, from.Y));
 
 	for {
 		if (len(frontier) <= 0) {
@@ -781,12 +781,9 @@ func (this *IntegerGrid2D) ShortestPath(from *IntVec2, to *IntVec2, blockValue i
 				bestToHere = minCostToStart.GetValue(edge.X, edge.Y);
 			}
 
-			if(costToHere + 1 < bestToHere){
-				minCostToStart.SetValue(edge.X, edge.Y, costToHere + 1);
-				//Log.Info("Point %d to %d", edge.TileIndex(), next.TileIndex());
+			if(costToHere + this.GetValue(edge.X, edge.Y) < bestToHere){
+				minCostToStart.SetValue(edge.X, edge.Y, costToHere + this.GetValue(edge.X, edge.Y));
 				nearestToStart[edge.TileIndex()] = next.TileIndex();
-				//minCostToStart[neighbor.Id] = costToHere + edge.Weight;
-				//nearestToStart[neighbor.Id] = next;
 				_, alreadyEnqueued := frontierMap[edge.TileIndex()];
 				if(!alreadyEnqueued){
 					frontierMap[edge.TileIndex()] = 1;
@@ -806,7 +803,6 @@ func (this *IntegerGrid2D) ShortestPath(from *IntVec2, to *IntVec2, blockValue i
 		return nil;
 	}
 
-	//Log.Info("Done %d", from.TileIndex());
 	nextPathStep := to.TileIndex();
 
 	for {
@@ -814,7 +810,6 @@ func (this *IntegerGrid2D) ShortestPath(from *IntVec2, to *IntVec2, blockValue i
 		if(next == 0){
 			log.Fatal("exit");
 		}
-		//Log.Info("Check %d to %d", nextPathStep, next);
 		if(next == from.TileIndex()){
 			break;
 		}

@@ -350,3 +350,82 @@ func IsLower(s string) bool {
 	}
 	return true
 }
+
+func HexToBinaryArray(s string) []int {
+	bin := make([]int, 0);
+
+	for _, v := range s{
+		switch(v){
+			case '0':
+				bin = append(bin, 0,0,0,0);
+				break;
+			case '1':
+				bin = append(bin, 0,0,0,1);
+				break;
+			case '2':
+				bin = append(bin, 0,0,1,0);
+				break;
+			case '3':
+				bin = append(bin, 0,0,1,1);
+				break;
+			case '4':
+				bin = append(bin, 0,1,0,0);
+				break;
+			case '5':
+				bin = append(bin, 0,1,0,1);
+				break;
+			case '6':
+				bin = append(bin, 0,1,1,0);
+				break;
+			case '7':
+				bin = append(bin, 0,1,1,1);
+				break;
+			case '8':
+				bin = append(bin, 1,0,0,0);
+				break;
+			case '9':
+				bin = append(bin, 1,0,0,1);
+				break;
+			case 'A':
+				bin = append(bin, 1,0,1,0);
+				break;
+			case 'B':
+				bin = append(bin, 1,0,1,1);
+				break;
+			case 'C':
+				bin = append(bin, 1,1,0,0);
+				break;
+			case 'D':
+				bin = append(bin, 1,1,0,1);
+				break;
+			case 'E':
+				bin = append(bin, 1,1,1,0);
+				break;
+			case 'F':
+				bin = append(bin, 1,1,1,1);
+				break;
+		}
+	}
+
+	return bin;
+}
+
+func PrintBinaryArray(bytes []int) string  {
+	buff := "";
+	for _, v := range bytes{
+		buff += fmt.Sprintf("%d", v);
+	}
+	return buff;
+}
+
+func PrintIntArray(vals []int) string  {
+	buff := "[";
+	for _, v := range vals{
+		if(buff != "["){
+			buff += ",";
+		}
+		buff += fmt.Sprintf("%d", v);
+	}
+	buff += "]";
+	return buff;
+}
