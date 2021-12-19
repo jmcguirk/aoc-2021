@@ -260,8 +260,45 @@ type IntVec3 struct{
 	Z  		int;
 }
 
+func(this *IntVec3) Equals(that *IntVec3) bool {
+	return this.X == that.X && this.Y == that.Y && this.Z == that.Z;
+}
+
 func(this *IntVec3) ToString() string{
 	return fmt.Sprintf("%d,%d,%d", this.X, this.Y, this.Z);
+}
+
+func(this *IntVec3) Add(that *IntVec3) *IntVec3{
+	res := &IntVec3{};
+	res.X = this.X + that.X;
+	res.Y = this.Y + that.Y;
+	res.Z = this.Z + that.Z;
+	return res;
+}
+
+func(this *IntVec3) Sub(that *IntVec3) *IntVec3{
+	res := &IntVec3{};
+	res.X = this.X - that.X;
+	res.Y = this.Y - that.Y;
+	res.Z = this.Z - that.Z;
+	return res;
+}
+
+
+func(this *IntVec3) Manhattan(that *IntVec3) int{
+	dX := this.X - that.X;
+	if(dX < 0){
+		dX = dX * -1;
+	}
+	dY := this.Y - that.Y;
+	if(dY < 0){
+		dY = dY * -1;
+	}
+	dZ := this.Z - that.Z;
+	if(dZ < 0){
+		dZ = dZ * -1;
+	}
+	return dX + dY + dZ;
 }
 
 // greatest common divisor (GCD) via Euclidean algorithm

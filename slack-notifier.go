@@ -1,5 +1,5 @@
 package main
-
+/*
 import (
 	"fmt"
 	"github.com/nlopes/slack"
@@ -29,3 +29,4 @@ func (this *SlackManager) SendMessage(text string) {
 
 
 var Slack = &SlackManager{};
+*/
