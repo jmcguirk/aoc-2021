@@ -307,7 +307,12 @@ func (this *IntegerGrid2D) PrintAscii() string {
 			} else{
 				val := this.GetValue(i, j);
 				if(val > 0){
-					buff += fmt.Sprintf("%c", this.GetValue(i, j));
+					if(val == 1){
+						buff += fmt.Sprintf("%c", '#');
+					} else{
+						buff += fmt.Sprintf("%c", this.GetValue(i, j));
+					}
+
 				} else{
 					buff += ".";
 				}
