@@ -140,3 +140,29 @@ func (this *IntegerGrid3D) GetValue(x int, y int, z int) int {
 	}
 	return val;
 }
+
+
+func (this *IntegerGrid3D) CountGreaterThan(threshold int) int {
+	xMin := this.MinX();
+	xMax := this.MaxX();
+
+	yMin := this.MinY();
+	yMax := this.MaxY();
+
+	zMin := this.MinZ();
+	zMax := this.MaxZ();
+
+	total := 0;
+	for j := yMin; j<= yMax; j++{
+		for i := xMin; i<= xMax; i++{
+			for k := zMin; k <= zMax; k++{
+				val := this.GetValue(i, j, k);
+				if(val > threshold){
+					total++;
+				}
+			}
+
+		}
+	}
+	return total;
+}
